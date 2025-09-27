@@ -14,8 +14,6 @@ WORKDIR /srv/jekyll
 
 RUN gem install jekyll bundler
 
-# Preinstalar el tema minimal mistakes
-RUN gem install minimal-mistakes-jekyll
 
 # Exponemos puerto por si quieres hacer `serve`
 EXPOSE 4000
