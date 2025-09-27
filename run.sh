@@ -26,4 +26,6 @@ else
     -v "$OUT_DIR":"$OUT_DIR" \
     docker-jekyll \
     /usr/local/bin/install-gem.sh "$REPO_DIR" 
+    docker start -ai "$CONTAINER_NAME"
+    docker exec -it "$CONTAINER_NAME" /usr/local/bin/build-site.sh "$REPO_DIR" "$OUT_DIR"
 fi
