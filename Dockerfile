@@ -14,9 +14,11 @@ WORKDIR /srv/jekyll
 
 RUN gem install jekyll bundler
 
-# Copiar script dentro de la imagen
+# Copiar scripts dentro de la imagen
 COPY build-site.sh /usr/local/bin/build-site.sh
 RUN chmod +x /usr/local/bin/build-site.sh
+COPY install-gem.sh /usr/local/bin/install-gem.sh
+RUN chmod +x /usr/local/bin/install-gem.sh
 
-# Por defecto arrancamos bash, pero puedes cambiarlo por el script
-CMD ["/usr/local/bin/build-site.sh", "/src", "/output"]
+
+CMD ["bash"]

@@ -18,11 +18,12 @@ docker image inspect docker-jekyll >/dev/null 2>&1 || \
 if docker ps -a --format '{{.Names}}' | grep -q "^$CONTAINER_NAME\$"; then
   echo "Reanudando contenedor existente '$CONTAINER_NAME'..."
   docker start -ai "$CONTAINER_NAME"
+  docker exec -it "$CONTAINER_NAME" /usr/local/bin/build-site.sh "$REPO_DIR" "$OUT_DIR"
 else
   # Ejecutar el contenedor por primera vez
   docker run -it --name "$CONTAINER_NAME" \
     -v "$REPO_DIR":"$REPO_DIR" \
     -v "$OUT_DIR":"$OUT_DIR" \
     docker-jekyll \
-    /usr/local/bin/build-site.sh "$REPO_DIR" "$OUT_DIR"
+    /usr/local/bin/install-gem.sh "$REPO_DIR" 
 fi
