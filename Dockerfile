@@ -14,10 +14,6 @@ WORKDIR /srv/jekyll
 
 RUN gem install jekyll bundler
 
-
-# Exponemos puerto por si quieres hacer `serve`
-EXPOSE 4000
-
 # Copiar script dentro de la imagen
 COPY build-site.sh /usr/local/bin/build-site.sh
 RUN chmod +x /usr/local/bin/build-site.sh
