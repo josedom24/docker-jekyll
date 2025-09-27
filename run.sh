@@ -29,8 +29,8 @@ else
     -v "$REPO_DIR":"$REPO_DIR" \
     -v "$OUT_DIR":"$OUT_DIR" \
     docker-jekyll \
-    bash -c "/usr/local/bin/install-gem.sh '$REPO_DIR' && tail -f /dev/null"
-
+    bash -c "tail -f /dev/null"
+    docker exec -i "$CONTAINER_NAME" /usr/local/bin/install-gem.sh "$REPO_DIR" 
   # Ejecutar build-site.sh
   docker exec -i "$CONTAINER_NAME" /usr/local/bin/build-site.sh "$REPO_DIR" "$OUT_DIR"
 fi
