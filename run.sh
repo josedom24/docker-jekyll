@@ -14,18 +14,23 @@ OUT_DIR=$(realpath "$3")
 docker image inspect docker-jekyll >/dev/null 2>&1 || \
   docker build -t docker-jekyll .
 
-# Si el contenedor existe y está parado, arrancarlo
+# Si el contenedor existe
 if docker ps -a --format '{{.Names}}' | grep -q "^$CONTAINER_NAME\$"; then
-  echo "Reanudando contenedor existente '$CONTAINER_NAME'..."
-  docker start -ai "$CONTAINER_NAME"
-  docker exec -it "$CONTAINER_NAME" /usr/local/bin/build-site.sh "$REPO_DIR" "$OUT_DIR"
+  echo "Contenedor existente '$CONTAINER_NAME', ejecutando build-site.sh..."
+  # Arrancar si está parado
+  if ! docker ps --format '{{.Names}}' | grep -q "^$CONTAINER_NAME\$"; then
+    docker start "$CONTAINER_NAME"
+  fi
+  docker exec -i "$CONTAINER_NAME" /usr/local/bin/build-site.sh "$REPO_DIR" "$OUT_DIR"
 else
-  # Ejecutar el contenedor por primera vez
-  docker run -it --name "$CONTAINER_NAME" \
+  echo "Creando contenedor '$CONTAINER_NAME' y ejecutando install-gem.sh..."
+  # Crear contenedor y ejecutar install-gem.sh
+  docker run -dit --name "$CONTAINER_NAME" \
     -v "$REPO_DIR":"$REPO_DIR" \
     -v "$OUT_DIR":"$OUT_DIR" \
     docker-jekyll \
-    /usr/local/bin/install-gem.sh "$REPO_DIR" 
-    docker start -ai "$CONTAINER_NAME"
-    docker exec -it "$CONTAINER_NAME" /usr/local/bin/build-site.sh "$REPO_DIR" "$OUT_DIR"
+    bash -c "/usr/local/bin/install-gem.sh '$REPO_DIR' && tail -f /dev/null"
+
+  # Ejecutar build-site.sh
+  docker exec -i "$CONTAINER_NAME" /usr/local/bin/build-site.sh "$REPO_DIR" "$OUT_DIR"
 fi
