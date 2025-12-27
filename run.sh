@@ -28,6 +28,7 @@ else
   docker run -dit --name "$CONTAINER_NAME" \
     -v "$REPO_DIR":"$REPO_DIR" \
     -v "$OUT_DIR":"$OUT_DIR" \
+    -e JEKYLL_ENV=production \
     docker-jekyll \
     bash -c "tail -f /dev/null"
     docker exec -i "$CONTAINER_NAME" /usr/local/bin/install-gem.sh "$REPO_DIR" 
