@@ -15,4 +15,4 @@ echo "Generando HTML en: $DEST_DIR"
 cd "$SRC_DIR"
 
 # Generar el sitio
-bundle exec jekyll build -d "$DEST_DIR"
+JEKYLL_ENV=production bundle exec jekyll build -d "$DEST_DIR"
